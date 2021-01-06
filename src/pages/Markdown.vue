@@ -2,7 +2,7 @@
  * @Author: hhhhhq
  * @Date: 2020-12-21 09:11:13
  * @LastEditors: hhhhhq
- * @LastEditTime: 2020-12-21 22:23:20
+ * @LastEditTime: 2021-01-05 11:37:09
  * @Description: file content
 -->
 <template>
@@ -11,6 +11,7 @@
     <section class="w-10/12 m-auto h-screen flex">
       <article class="w-1/2 border">
         <textarea
+          ref="martkdownTextArea"
           class="w-full h-full border"
           :value="text"
           @input="update"
@@ -23,14 +24,14 @@
 
 <script>
 import marked from "marked"
-import debounce from "../utilities/mixins/debounce"
+import useDebounce from "../utilities/composition/useDebounce"
 
 export default {
   name: "Markdown",
-  mixins: [debounce],
   data() {
     return {
       text: "",
+      debounce: "",
     }
   },
   computed: {
@@ -44,9 +45,10 @@ export default {
   // created() {
   //   console.log("created")
   // },
-  // mounted() {
-  //   console.log("mounted")
-  // },
+  mounted() {
+    this.debounce = useDebounce()
+    this.$refs.martkdownTextArea.focus()
+  },
   // beforeUnmount() {
   //   console.log("before unmount")
   // },
@@ -62,6 +64,7 @@ export default {
   methods: {
     update(e) {
       const task = () => (this.text = e.target.value)
+
       this.debounce(task)
     },
   },

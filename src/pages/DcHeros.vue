@@ -2,7 +2,7 @@
  * @Author: hhhhhq
  * @Date: 2020-12-18 22:32:57
  * @LastEditors: hhhhhq
- * @LastEditTime: 2020-12-18 22:36:02
+ * @LastEditTime: 2020-12-30 21:53:31
  * @Description: file content
 -->
 <template>
@@ -19,8 +19,9 @@
           <button @click="removeHero(hero)">x</button>
         </li>
       </ul>
-      <form class="mt-10" @submit.prevent="addHero(newData)">
+      <form class="mt-10" @submit.prevent="addHero()">
         <input
+          ref="newHeroRef"
           class="border rounded"
           type="text"
           v-model.lazy="newData"
@@ -38,39 +39,47 @@
 </template>
 
 <script>
+import { computed, onMounted, ref } from "vue"
+
 export default {
   name: "DcHeros",
-  data() {
-    return {
-      newData: "",
-      dcHeros: [
-        { name: "SuperGirl" },
-        { name: "Flash" },
-        { name: "Batman" },
-        { name: "Arro" },
-      ],
-    }
-  },
-  computed: {
-    herosCount() {
-      return `${this.dcHeros.length} Heros`
-    },
-  },
-  methods: {
-    addHero(newData) {
-      if (!newData) {
-        alert("check your input")
-      } else {
-        this.dcHeros.push({ name: newData })
-        this.newData = ""
-      }
-    },
-    removeHero(hero) {
+  setup() {
+    const newHeroRef = ref("")
+    const newData = ref("")
+    const dcHeros = ref([
+      { name: "SuperGirl" },
+      { name: "Flash" },
+      { name: "Batman" },
+      { name: "Arro" },
+    ])
+
+    const herosCount = computed({
+      get: () => `${dcHeros.value.length} Heros`,
+    })
+
+    onMounted(() => {
+      newHeroRef.value.focus()
+    })
+
+    function removeHero(hero) {
       let answer = window.confirm("do you want to remove it?")
       if (answer) {
-        this.dcHeros = this.dcHeros.filter(dchero => dchero.name !== hero.name)
+        dcHeros.value = dcHeros.value.filter(
+          dchero => dchero.name !== hero.name
+        )
       }
-    },
+    }
+
+    function addHero() {
+      if (!newData.value) {
+        alert("check your input")
+      } else {
+        dcHeros.value.unshift({ name: newData.value })
+        newData.value = ""
+      }
+    }
+
+    return { dcHeros, newData, removeHero, herosCount, addHero, newHeroRef }
   },
 }
 </script>
