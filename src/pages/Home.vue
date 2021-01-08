@@ -2,7 +2,7 @@
  * @Author: hhhhhq
  * @Date: 2020-12-20 10:54:53
  * @LastEditors: hhhhhq
- * @LastEditTime: 2020-12-20 10:59:11
+ * @LastEditTime: 2021-01-07 10:39:45
  * @Description: file content
 -->
 <template>
@@ -14,6 +14,11 @@
 <script>
 export default {
   name: "Home",
+  data() {
+    return {
+      store: this.$store.state,
+    }
+  },
 }
 </script>
 

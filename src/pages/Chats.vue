@@ -2,7 +2,7 @@
  * @Author: hhhhhq
  * @Date: 2021-01-05 15:19:23
  * @LastEditors: hhhhhq
- * @LastEditTime: 2021-01-06 11:02:55
+ * @LastEditTime: 2021-01-07 11:17:53
  * @Description: file content
 -->
 <template>
@@ -15,7 +15,7 @@
             v-for="chat in state.chats"
             :key="chat.message"
             class="w-full"
-            :class="chat.userId === state.userId ? 'text-right' : 'text-left'"
+            :class="chat.userId === userId ? 'text-right' : 'text-left'"
           >
             {{ chat.message }}
           </div>
@@ -36,18 +36,22 @@
 </template>
 
 <script>
-import { onMounted, reactive } from "vue"
+import { computed, onMounted, reactive } from "vue"
 import firebase from "../utilities/firebase"
+import { useStore } from "vuex"
 
 export default {
+  name: "Chat",
   setup() {
     const state = reactive({
       chats: {},
       isLoading: false,
       message: "",
       collection: null,
-      userId: null,
     })
+
+    const store = useStore()
+    const userId = computed(() => store.state.authUser.uid)
 
     onMounted(async () => {
       const db = firebase.database()
@@ -59,18 +63,17 @@ export default {
       // state.collection.on("value", snapshot => {
       //   state.chats = snapshot.val()
       // })
-      state.userId = firebase.auth().currentUser.uid
       state.isLoading = false
     })
 
     function addMessage() {
+      console.log("addMessage")
       const newChat = state.collection.push()
-      state.userId = firebase.auth().currentUser.uid
-      newChat.set({ userId: state.userId, message: state.message })
+      newChat.set({ userId: userId, message: state.message })
       state.message = ""
     }
 
-    return { state, addMessage }
+    return { state, addMessage, userId }
   },
 }
 </script>

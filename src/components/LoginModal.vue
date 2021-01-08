@@ -2,11 +2,11 @@
  * @Author: hhhhhq
  * @Date: 2020-12-22 15:22:31
  * @LastEditors: hhhhhq
- * @LastEditTime: 2020-12-30 10:56:14
+ * @LastEditTime: 2021-01-08 08:23:36
  * @Description: file content
 -->
 <template>
-  <div>
+  <div v-if="isLoginOpen">
     <section
       class="h-screen w-screen bg-gray-400 fixed top-0 opacity-50 z-20"
       @click="close"
@@ -75,8 +75,13 @@ export default {
       isLoading: false,
     }
   },
+  computed: {
+    isLoginOpen() {
+      return this.$store.state.isLoginOpen
+    },
+  },
   mounted() {
-    this.$refs.emailRef.focus()
+    // console.log(this.$store.state)
   },
   methods: {
     submit() {
@@ -95,10 +100,11 @@ export default {
         .catch(e => {
           console.log(e)
           this.isLoading = false
+          this.close()
         })
     },
     close() {
-      this.$emit("close-login-modal")
+      this.$store.commit("setLoginModal", false)
     },
   },
 }

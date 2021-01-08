@@ -2,29 +2,31 @@
  * @Author: hhhhhq
  * @Date: 2021-01-06 11:22:12
  * @LastEditors: hhhhhq
- * @LastEditTime: 2021-01-06 11:28:19
+ * @LastEditTime: 2021-01-07 15:52:09
  * @Description: file content
  */
-import { createApp } from "vue"
 import { createStore } from "vuex"
 
 // Create a new store instance.
 const store = createStore({
   state() {
     return {
-      count: 0,
+      isLoggedIn: false,
+      authUser: {},
+      isLoginOpen: false,
     }
   },
   mutations: {
-    increment(state) {
-      state.count++
+    setIsLoggedin(state, payload) {
+      state.isLoggedIn = payload
+    },
+    setAuthUser(state, payload) {
+      state.authUser = payload
+    },
+    setLoginModal(state, payload) {
+      state.isLoginOpen = payload
     },
   },
 })
 
-const app = createApp({
-  /* your root component */
-})
-
-// Install the store instance as a plugin
-app.use(store)
+export default store

@@ -2,7 +2,7 @@
  * @Author: hhhhhq
  * @Date: 2020-12-18 16:31:07
  * @LastEditors: hhhhhq
- * @LastEditTime: 2021-01-05 15:20:39
+ * @LastEditTime: 2021-01-08 08:15:32
  * @Description: file content
 -->
 <template>
@@ -12,7 +12,7 @@
     <router-link v-for="item in list" :key="item.to" :to="item.to">{{
       item.title
     }}</router-link>
-    <button v-if="!isLoggedIn" @click="$emit('open-login-modal')">Login</button>
+    <button v-if="!isLoggedIn" @click="openLogin">Login</button>
     <button v-else class="mx-2" @click="logout">Log out</button>
   </nav>
 </template>
@@ -22,12 +22,7 @@ import firebase from "../utilities/firebase"
 
 export default {
   name: "AppHeader",
-  props: {
-    isLoggedIn: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: {},
   data() {
     return {
       list: [
@@ -38,8 +33,14 @@ export default {
         { title: "Calculator", to: "/calculator" },
         { title: "ReuseableModal", to: "/reuseableModal" },
         { title: "Chat", to: "/chats" },
+        { title: "UserCrud", to: "/crud" },
       ],
     }
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn
+    },
   },
   methods: {
     logout() {
@@ -55,6 +56,9 @@ export default {
           // An error happened.
           console.log(error)
         })
+    },
+    openLogin() {
+      this.$store.commit("setLoginModal", true)
     },
   },
 }
