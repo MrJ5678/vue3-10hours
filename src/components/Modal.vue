@@ -2,7 +2,7 @@
  * @Author: hhhhhq
  * @Date: 2021-01-05 09:41:29
  * @LastEditors: hhhhhq
- * @LastEditTime: 2021-01-05 10:30:30
+ * @LastEditTime: 2021-01-08 16:15:51
  * @Description: file content
 -->
 <template>
@@ -27,9 +27,8 @@
 </template>
 
 <script>
-import {} from "vue"
-
 export default {
+  emits: ["close"],
   setup(_, { emit }) {
     function close() {
       emit("close")
